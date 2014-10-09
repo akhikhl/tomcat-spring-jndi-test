@@ -9,7 +9,7 @@
   minIdle="10"
   maxWait="10000"
   driverClassName="com.mysql.jdbc.Driver"
-  url="jdbc:mysql://172.17.0.8:3306/test"
+  url="jdbc:mysql://172.17.0.10:3306/test"
   username="user1"
   password="password1"/>
 </Context>
