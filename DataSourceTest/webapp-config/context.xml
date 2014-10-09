@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Context>
+<Resource 
+  name="jdbc/devcore" 
+  auth="Container" 
+  type="javax.sql.DataSource"
+  maxActive="100"
+  minIdle="10"
+  maxWait="10000"
+  driverClassName="com.mysql.jdbc.Driver"
+  url="jdbc:mysql://172.17.0.8:3306/test"
+  username="user1"
+  password="password1"/>
+</Context>

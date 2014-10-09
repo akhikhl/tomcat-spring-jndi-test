@@ -1,0 +1,5 @@
+.gradle
+build
+private
+tomcat:8080
+DataSourceTest/src/main/webapp/WEB-INF/classes/
