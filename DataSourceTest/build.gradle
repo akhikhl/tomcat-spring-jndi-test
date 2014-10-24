@@ -1,142 +1,3 @@
-apply plugin: "war"
-apply plugin: "eclipse-wtp"
-//apply plugin: "groovy"
-apply plugin: 'org.akhikhl.gretty'
-apply plugin: "java"
-
-ext {
-    springVersion = "4.0.6.RELEASE"
-    springSecurityVersion = "3.2.5.RELEASE"
-    hibernateVersion = "4.3.4.Final"
-    tomcatVersion = "8.0.14"
-    atomikosVersion = "3.9.3"
-    activeMqVersion = "5.10.0"
-    slf4jVersion="1.7.7"
-    log4jVersion="2.0.1"
-    mysqlVersion = "5.1.31" // refer below buildScript block, to modify shared variable
-}
-
-targetCompatibility = 1.8
-sourceCompatibility = 1.8
-
-configurations.all {
-    resolutionStrategy {
-        failOnVersionConflict()
-        force "org.springframework:spring-context:${springVersion}", "org.springframework:spring-beans:${springVersion}","org.springframework:spring-core:${springVersion}",
-        "org.springframework:spring-expression:${springVersion}","org.springframework:spring-aop:${springVersion}","org.springframework:spring-web:${springVersion}",
-        "javax.servlet:javax.servlet-api:3.1.0","xml-apis:xml-apis:1.3.03", "org.springframework:spring-jdbc:${springVersion}","org.springframework:spring-tx:${springVersion}", 
-        "commons-logging:commons-logging:1.1.3","org.springframework.security:spring-security-core:${springSecurityVersion}","org.springframework:spring-webmvc:${springVersion}",
-        "org.springframework.security:spring-security-config:${springSecurityVersion}","org.springframework.security:spring-security-web:${springSecurityVersion}",
-        "commons-codec:commons-codec:1.6", "org.eclipse.jdt.core.compiler:ecj:4.4", 
-        "org.apache.tomcat.embed:tomcat-embed-core:${tomcatVersion}", "org.apache.tomcat.embed:tomcat-embed-logging-juli:${tomcatVersion}",
-        "org.slf4j:slf4j-api:${slf4jVersion}", "org.eclipse.jetty.orbit:javax.servlet.jsp:2.2.0.v201112011158", "org.glassfish:javax.el:3.0.0"
-    }
-
-}
-
-repositories {
-    mavenCentral()
-}
-
-sourceSets {
-    integration {
-        java {
-            compileClasspath += main.output
-            runtimeClasspath += main.output
-        }
-    }
-    main {
-        java {
-            output.classesDir="src/main/webapp/WEB-INF/classes"
-        }
-    }
-}
-
-configurations {
-    integrationCompile.extendsFrom testCompile
-    integrationRuntime.extendsFrom testRuntime
-}
-
-dependencies {
-    gretty "javax.transaction:javax.transaction-api:1.2",
-           "com.atomikos:transactions:${atomikosVersion}",
-           "com.atomikos:transactions-hibernate3:${atomikosVersion}",
-           "commons-pool:commons-pool:1.6", 
-           "com.jamonapi:jamon:2.78",
-           "org.apache.activemq:activemq-client:${activeMqVersion}",
-           "org.apache.activemq:activemq-broker:${activeMqVersion}",
-           "org.apache.activemq:activeio-core:3.1.4",
-           "org.apache.activemq:activemq-kahadb-store:${activeMqVersion}",
-           "mysql:mysql-connector-java:${mysqlVersion}",
-           "org.apache.tomcat:tomcat-dbcp:${tomcatVersion}"
-
-    compile "org.springframework:spring-context:${springVersion}"
-    compile "org.springframework:spring-orm:${springVersion}"
-    compile "org.springframework:spring-webmvc:${springVersion}"
-    compile "org.springframework:spring-jms:${springVersion}"
-
-    compile "org.springframework:spring-context-support:${springVersion}"
-
-    compile "org.springframework.security:spring-security-config:${springSecurityVersion}"
-    compile "org.springframework.security:spring-security-web:${springSecurityVersion}"
-    compile "org.springframework.security:spring-security-acl:${springSecurityVersion}"
-    compile("net.sf.ehcache:ehcache:2.8.3") {
-        exclude group: "org.slf4j"
-    }
-
-    compile("org.hibernate:hibernate-entitymanager:${hibernateVersion}") {
-        exclude group: "org.jboss.spec.javax.transaction"
-    }
-
-    providedCompile "javax.transaction:javax.transaction-api:1.2"
-    providedCompile "com.atomikos:transactions-hibernate3:${atomikosVersion}" 
-    providedCompile "org.slf4j:jcl-over-slf4j:${slf4jVersion}"
-    providedCompile "mysql:mysql-connector-java:${mysqlVersion}"
-    providedCompile("org.apache.activemq:activemq-all:${activeMqVersion}") {
-        exclude group: 'org.slf4j'
-    }
-    providedCompile "javax.servlet:javax.servlet-api:3.1.0", "javax.servlet:jsp-api:2.0"
-    providedCompile "commons-pool:commons-pool:1.6"
-    providedCompile "com.jamonapi:jamon:2.78"
-
-
-    compile "org.apache.commons:commons-lang3:3.3"
-    providedCompile "org.slf4j:slf4j-api:${slf4jVersion}"
-    providedCompile "org.slf4j:slf4j-log4j12:${slf4jVersion}"
-    compile "org.apache.logging.log4j:log4j-1.2-api:${log4jVersion}"
-    compile "org.apache.logging.log4j:log4j-slf4j-impl:${log4jVersion}"
-
-    compile "org.hibernate:hibernate-validator:5.1.0.Final"
-    compile "javax.inject:javax.inject:1"
-    compile "com.fasterxml.jackson.core:jackson-databind:2.3.2"
-    compile "org.openid4java:openid4java:0.9.8"
-    compile "javax.ws.rs:jsr311-api:1.1.1"
-    compile "jstl:jstl:1.2"
-    compile "org.apache.commons:commons-collections4:4.0"
-    compile "org.springframework.security.oauth:spring-security-oauth2:2.0.1.RELEASE"
-    compile "org.springframework.security:spring-security-jwt:1.0.2.RELEASE"
-
-    testCompile "junit:junit:4.11"
-    testCompile "org.mockito:mockito-all:1.9.5"
-    testCompile "org.springframework:spring-test:${springVersion}"
-    testCompile "mysql:mysql-connector-java:${mysqlVersion}"
-
-    integrationCompile sourceSets.main.output
-    integrationCompile configurations.testCompile
-    integrationCompile sourceSets.test.output
-    integrationRuntime configurations.testRuntime
-}
-
-task integrationTest(type: Test, dependsOn: jar) {
-    testClassesDir = sourceSets.integration.output.classesDir
-    classpath = sourceSets.integration.runtimeClasspath
-    systemProperties["jar.path"] = jar.archivePath
-}
-
-check.dependsOn integrationTest
-
-/** Tomcat settings */
-
 buildscript {
   repositories {
     mavenLocal()
@@ -144,11 +5,8 @@ buildscript {
   }
 
   dependencies {
-    classpath('org.akhikhl.gretty:gretty:1.1.4') {
-        exclude group: 'org.slf4j', module: 'slf4j-api'
-    }
+    classpath('org.akhikhl.gretty:gretty:1.1.5-SNAPSHOT')
   }
-
 }
 
 repositories {
@@ -156,8 +14,30 @@ repositories {
   jcenter()
 }
 
-gretty {
-    servletContainer = 'tomcat8'
-    httpPort = 9090
-    enableNaming = true
+apply plugin: "java"
+apply plugin: "war"
+apply plugin: 'org.akhikhl.gretty'
+
+ext {
+  mysqlVersion = '5.1.31'
+  springVersion = '4.0.6.RELEASE'
+  logbackVersion = '1.1.2'
 }
+
+targetCompatibility = 1.8
+sourceCompatibility = 1.8
+
+dependencies {
+  gretty "mysql:mysql-connector-java:$mysqlVersion"
+  gretty "org.apache.tomcat:tomcat-dbcp:$tomcat8Version"
+  compile "org.springframework:spring-webmvc:$springVersion"
+  compile "org.springframework:spring-jdbc:$springVersion"
+  compile "ch.qos.logback:logback-classic:$logbackVersion"
+}
+
+gretty {
+  servletContainer = 'tomcat8'
+  httpPort = 9090
+  enableNaming = true
+}
+
