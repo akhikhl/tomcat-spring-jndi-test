@@ -7,7 +7,7 @@ Little test for JNDI datasources under tomcat and spring
 
 ```shell
 cd DataSourceTest
-gradle run
+gradle appRun
 ```
 
 then enter in browser:

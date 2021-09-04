@@ -1,43 +1,39 @@
 buildscript {
   repositories {
     mavenLocal()
-    jcenter()
   }
+}
 
-  dependencies {
-    classpath('org.akhikhl.gretty:gretty:1.1.5-SNAPSHOT')
-  }
+plugins {
+    id 'java'
+    id 'war'
+    id 'org.gretty' version '3.0.6'
 }
 
 repositories {
-  mavenLocal()
-  jcenter()
+  mavenCentral()
 }
-
-apply plugin: "java"
-apply plugin: "war"
-apply plugin: 'org.akhikhl.gretty'
 
 ext {
-  mysqlVersion = '5.1.31'
-  springVersion = '4.0.6.RELEASE'
-  logbackVersion = '1.1.2'
+  mysqlVersion = '8.0.24'
+  springVersion = '5.3.9'
+  logbackVersion = '1.2.5'
 }
 
-targetCompatibility = 1.8
-sourceCompatibility = 1.8
+compileJava {
+	options.release = 11
+}
 
 dependencies {
   gretty "mysql:mysql-connector-java:$mysqlVersion"
-  gretty "org.apache.tomcat:tomcat-dbcp:$tomcat8Version"
-  compile "org.springframework:spring-webmvc:$springVersion"
-  compile "org.springframework:spring-jdbc:$springVersion"
-  compile "ch.qos.logback:logback-classic:$logbackVersion"
+  gretty "org.apache.tomcat:tomcat-dbcp:$tomcat9Version"
+  implementation "org.springframework:spring-webmvc:$springVersion"
+  implementation "org.springframework:spring-jdbc:$springVersion"
+  implementation "ch.qos.logback:logback-classic:$logbackVersion"
 }
 
 gretty {
-  servletContainer = 'tomcat8'
+  servletContainer = 'tomcat9'
   httpPort = 9090
   enableNaming = true
 }
-
