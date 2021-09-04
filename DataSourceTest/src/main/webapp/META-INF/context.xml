@@ -5,10 +5,10 @@
   name="jdbc/devcore" 
   auth="Container" 
   type="javax.sql.DataSource"
-  maxActive="100"
+  maxTotal="100"
   minIdle="10"
-  maxWait="10000"
-  driverClassName="com.mysql.jdbc.Driver"
+  maxWaitMillis="10000"
+  driverClassName="com.mysql.cj.jdbc.Driver"
   url="jdbc:mysql://172.17.0.10:3306/test"
   username="user1"
   password="password1"/>

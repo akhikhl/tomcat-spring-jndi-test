@@ -1,9 +1,7 @@
 buildscript {
   repositories {
     mavenLocal()
-    jcenter()
   }
-
 }
 
 plugins {
@@ -13,14 +11,13 @@ plugins {
 }
 
 repositories {
-  mavenLocal()
-  jcenter()
+  mavenCentral()
 }
 
 ext {
-  mysqlVersion = '5.1.31'
-  springVersion = '4.0.6.RELEASE'
-  logbackVersion = '1.1.2'
+  mysqlVersion = '8.0.24'
+  springVersion = '5.3.9'
+  logbackVersion = '1.2.5'
 }
 
 compileJava {
@@ -40,4 +37,3 @@ gretty {
   httpPort = 9090
   enableNaming = true
 }
-
